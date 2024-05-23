@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -20,6 +21,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -517,7 +521,35 @@ fun ItemComponent(
         }
     }
 }
+@Composable
+fun SearchBar() {
+    var searchInput by rememberSaveable { mutableStateOf("") }
 
+    TextField(
+        value = searchInput,
+        onValueChange = { searchInput = it },
+        label = {
+            Text(
+                "Search for product", style = TextStyle(
+                    fontWeight = FontWeight.Normal, fontSize = 18.sp
+                )
+            )
+        },
+        leadingIcon = {
+            Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Black)
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.White)
+            .padding(horizontal = 22.dp),
+        shape = RoundedCornerShape(10.dp),
+        textStyle = TextStyle(
+            color = Color.White, fontWeight = FontWeight.SemiBold
+        ),
+
+        )
+
+}
 
 @Composable
 fun ItemGrid(
@@ -525,34 +557,44 @@ fun ItemGrid(
     modifier: Modifier = Modifier
 ) {
 
-    Row {
-        Text(text = "Best Selling", style = TextStyle(
-            color = Color.Black,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        ),
-            modifier = Modifier
-                .padding(8.dp)
-        )
-    }
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ){
+        Row (
+            modifier = Modifier.fillMaxWidth(0.9f)
+        ){
+            Text(
+                text = "Best Selling", style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier
+                    .padding(vertical = 8.dp, horizontal = 22.dp)
+            )
+        }
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2),
-        modifier = Modifier,
-//            .padding(8.dp)
-//        contentPadding = PaddingValues(top = 4.dp)
-    ) {
-        items.forEach (
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier,
+            //            .padding(8.dp)
+            //        contentPadding = PaddingValues(top = 4.dp)
+        ) {
+            items.forEach(
 
 
-        ){ item ->
-            item {
-                ItemComponent(
-                    image = item.image,
-                    title = item.title,
-                    price = item.price,
-                    modifier = modifier
-                        .padding(4.dp)
-                )
+            ) { item ->
+                item {
+                    ItemComponent(
+                        image = item.image,
+                        title = item.title,
+                        price = item.price,
+                        modifier = modifier
+                            .padding(4.dp)
+                    )
+                }
             }
         }
     }
@@ -623,6 +665,13 @@ fun Sale(modifier: Modifier = Modifier) {
                 .background(Color(0xFF68AB00))
         )
     }
+}
+
+
+@Preview
+@Composable
+private fun SearchPreview() {
+    SearchBar()
 }
 
 @Preview
