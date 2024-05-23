@@ -23,14 +23,19 @@ class ProductsViewModel @Inject constructor(
         getProducts()
     }
 
-    fun getProducts(){
+    fun getProducts(
+        onSuccess: () -> Unit = {},
+        onFailure: (String) -> Unit = {}
+    ){
          viewModelScope.launch {
              when(val result = repository.getProducts()){
                  is NetworkResult.Success -> {
                      _state.value = ProductState(products = result.data)
+                     onSuccess()
                  }
                  is NetworkResult.Error -> {
                      _state.value = ProductState(error = result.message)
+                        onFailure(result.message ?: "An unknown error occurred")
                  }
                  else ->{
                      state

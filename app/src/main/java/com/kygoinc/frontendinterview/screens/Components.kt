@@ -1,15 +1,14 @@
 package com.kygoinc.frontendinterview.screens
 
 import android.util.Log
-import android.widget.Toolbar
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,8 +26,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,7 +40,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,7 +51,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -70,11 +67,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.kygoinc.frontendinterview.R
-import java.lang.Error
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -386,7 +381,7 @@ fun SearchField(
             .fillMaxWidth()
             .heightIn(min = 12.dp)
             .padding(vertical = 4.dp, horizontal = 10.dp),
-        value = usernameValue.value ,
+        value = usernameValue.value,
         onValueChange = {
             usernameValue.value = it
             onValueChange(it)
@@ -395,7 +390,9 @@ fun SearchField(
             Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Black)
         },
         trailingIcon = {
-            Icon(Icons.Default.List, contentDescription = "Search", tint = Color.Black)
+            IconButton(onClick = { /*TODO*/ }) {
+                painterResource(id = R.drawable.filter)
+            }
         },
         label = { Text(text = "Search products") },
         colors = OutlinedTextFieldDefaults.colors(
@@ -461,64 +458,51 @@ fun NormalTextFieldComponent(
 
 }
 
- val item = listOf(
+val item = listOf(
     Items(
-        title = "Item 1",
-        price = "Ksh 100",
-        image = R.drawable.login
+        title = "Traveling Bag",
+        price = "KES 600.00",
+        image = R.drawable.image_1,
+        description = "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight …see more"
     ),
     Items(
-        title = "Item 2",
-        price = "Ksh 200",
-        image = R.drawable.login
+        title = "Carrier Bag",
+        price = "Ksh 50.00",
+        image = R.drawable.image_2,
+        description = "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight …see more"
     ),
     Items(
-        title = "Item 3",
-        price = "Ksh 300",
-        image = R.drawable.login
+        title = "Puffer Jacket",
+        price = "Ksh 1800.00",
+        image = R.drawable.image_7,
+        description = "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight …see more"
     ),
     Items(
-        title = "Item 4",
-        price = "Ksh 400",
-        image = R.drawable.login
+        title = "Polo Shirt",
+        price = "Ksh 400.00",
+        image = R.drawable.image_9,
+        description = "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight …see more"
     ),
     Items(
-        title = "Item 5",
-        price = "Ksh 500",
-        image = R.drawable.login
+        title = "Round Neck",
+        price = "Ksh 300.00",
+        image = R.drawable.image_10,
+        description = "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight …see more"
     ),
     Items(
-        title = "Item 6",
-        price = "Ksh 600",
-        image = R.drawable.login
+        title = "Fleece Kikoi",
+        price = "Ksh 100.00",
+        image = R.drawable.image_11,
+        description = "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight …see more"
     ),
-    Items(
-        title = "Item 7",
-        price = "Ksh 700",
-        image = R.drawable.login
-    ),
-    Items(
-        title = "Item 8",
-        price = "Ksh 800",
-        image = R.drawable.login
-    ),
-    Items(
-        title = "Item 9",
-        price = "Ksh 900",
-        image = R.drawable.login
-    ),
-    Items(
-        title = "Item 10",
-        price = "Ksh 1000",
-        image = R.drawable.login
-    )
 
-)
+    )
 
 data class Items(
     val title: String,
     val price: String,
-    val image: Int
+    val image: Int,
+    val description: String
 )
 
 @Composable
@@ -527,6 +511,7 @@ fun ItemComponent(
     image: Int,
     title: String,
     price: String,
+    onItemClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -534,7 +519,10 @@ fun ItemComponent(
             .fillMaxWidth()
             .wrapContentHeight()
 //            .padding(top = 8.dp)
-            .background(Color.White),
+            .background(Color.White)
+            .clickable {
+                onItemClicked()
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
@@ -542,8 +530,9 @@ fun ItemComponent(
             contentDescription = "items",
             modifier = modifier
                 .fillMaxWidth(0.8f)
+                .height(200.dp)
                 .padding(top = 16.dp),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Fit
         )
 
         Row(
@@ -563,11 +552,12 @@ fun ItemComponent(
 
         Row(
             modifier = Modifier
-                    .fillMaxWidth(0.8f)
+                .fillMaxWidth(0.8f)
         )
         {
             Text(
-                text = price, style = TextStyle(
+                text = price,
+                style = TextStyle(
                     color = Color.Black,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Normal
@@ -576,6 +566,7 @@ fun ItemComponent(
         }
     }
 }
+
 @Composable
 fun SearchBar() {
     var searchInput by rememberSaveable { mutableStateOf("") }
@@ -609,17 +600,18 @@ fun SearchBar() {
 @Composable
 fun ItemGrid(
     items: List<Items>,
-    modifier: Modifier = Modifier
-) {
+    onItemClicked: (Int) -> Unit,
 
-    Column (
+    ) {
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-    ){
-        Row (
+    ) {
+        Row(
             modifier = Modifier.fillMaxWidth(0.9f)
-        ){
+        ) {
             Text(
                 text = "Best Selling", style = TextStyle(
                     color = Color.Black,
@@ -634,20 +626,21 @@ fun ItemGrid(
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier,
-            //            .padding(8.dp)
-            //        contentPadding = PaddingValues(top = 4.dp)
-        ) {
-            items.forEach(
+
+            ) {
+            items.forEachIndexed(
 
 
-            ) { item ->
+            ) { index, item ->
                 item {
                     ItemComponent(
                         image = item.image,
                         title = item.title,
                         price = item.price,
-                        modifier = modifier
-                            .padding(4.dp)
+                        modifier = Modifier.padding(4.dp),
+                        onItemClicked = {
+                            onItemClicked(index)
+                        }
                     )
                 }
             }
@@ -658,54 +651,54 @@ fun ItemGrid(
 @Composable
 fun Toolbar(
     onLogout: () -> Unit,
-    modifier: Modifier = Modifier) {
-  Row (
-      modifier = Modifier
-          .height(90.dp)
-          .fillMaxWidth()
-          .background(Color.White),
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.Bottom
-  ){
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = Modifier
+            .height(90.dp)
+            .fillMaxWidth()
+            .background(Color.White),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ) {
 
-      IconButton(onClick = { /* Handle click event here */ }) {
-          Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Black)
+        IconButton(onClick = { /* Handle click event here */ }) {
+            Icon(Icons.Outlined.Person, contentDescription = "Search", tint = Color.Black)
 
-      }
+        }
 
-      Text(
-          text = "Hello userName",
-          style = TextStyle(
-              color = Color.Black,
-              fontSize = 20.sp,
-              fontWeight = FontWeight.Medium
-          ),
-          modifier = Modifier
-              .padding(bottom = 8.dp)
-      )
+        Text(
+            text = "Hello userName",
+            style = TextStyle(
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium
+            ),
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+        )
 
 
-      IconButton(onClick = onLogout ) {
-          Icon(
-              painter = painterResource(id = R.drawable.logout), // Replace with your icon resource
-              contentDescription = "logout"
-          )
-      }
-  }
+        IconButton(onClick = onLogout) {
+            Icon(
+                painter = painterResource(id = R.drawable.logout), // Replace with your icon resource
+                contentDescription = "logout"
+            )
+        }
+    }
 }
 
 
 @Composable
 fun Sale(modifier: Modifier = Modifier) {
-    Row (
+    Row(
         modifier = Modifier
             .background(Color(0xFF68AB00))
             .padding(14.dp)
-            .fillMaxWidth()
-        ,
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Bottom
-    ){
+    ) {
 
 
         Text(
@@ -764,17 +757,19 @@ fun UsernameTextField(
 
 @Composable
 fun DetailsToolbar(
-    onBack: ()-> Unit,
-    onCancel: ()-> Unit,
-modifier: Modifier = Modifier) {
-    Row (
+    labelValue: String,
+    onBack: () -> Unit,
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
         modifier = Modifier
             .height(90.dp)
             .fillMaxWidth()
             .background(Color.White),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
-    ){
+    ) {
 
         IconButton(onClick = { /* Handle click event here */ }) {
             Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.Black)
@@ -782,7 +777,7 @@ modifier: Modifier = Modifier) {
         }
 
         Text(
-            text = "Item name",
+            text = labelValue,
             style = TextStyle(
                 color = Color.Black,
                 fontSize = 20.sp,
@@ -793,7 +788,7 @@ modifier: Modifier = Modifier) {
         )
 
 
-        IconButton(onClick = { onCancel() } ) {
+        IconButton(onClick = { onCancel() }) {
             Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.Black)
 
         }
@@ -808,6 +803,7 @@ fun LoginInputField(
     onChangeValue: (String) -> Unit,
     errorMessage: String? = null,
     indicator: Boolean = true,
+    isPassword: Boolean,
 
     ) {
     val colors = TextFieldDefaults.colors(
@@ -817,8 +813,8 @@ fun LoginInputField(
         disabledContainerColor = Color.Transparent,
         errorContainerColor = Color.Transparent,
         errorCursorColor = Color.Red,
-        focusedIndicatorColor = if (indicator) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.scrim,
-        unfocusedIndicatorColor = if (indicator) MaterialTheme.colorScheme.inversePrimary else MaterialTheme.colorScheme.scrim,
+        focusedIndicatorColor = if (indicator) Color(0xE0414141) else MaterialTheme.colorScheme.scrim,
+        unfocusedIndicatorColor = if (indicator) Color(0xFF414141) else MaterialTheme.colorScheme.scrim,
         errorIndicatorColor = Color.Red,
         errorLeadingIconColor = Color.Red,
         errorTrailingIconColor = Color.Red,
@@ -827,6 +823,8 @@ fun LoginInputField(
         disabledIndicatorColor = Color.Transparent
 
     )
+
+    val passwordVisibility = remember { mutableStateOf(false) }
     TextField(
         colors = colors,
         value = inputValue,
@@ -851,7 +849,7 @@ fun LoginInputField(
 
                     ),
                     modifier = Modifier
-                        .padding(start = 0.dp)
+                        .padding(start = 4.dp)
                         .offset(y = (-10).dp)
                         .offset(x = (-20).dp)
                 )
@@ -875,13 +873,13 @@ fun LoginInputField(
         onValueChange = onChangeValue,
         modifier = Modifier
             .background(Color.Transparent)
+            .fillMaxWidth(0.9f)
             .padding(
-                top = 0.dp, // 0dp to remove, adjust as needed
-                bottom = 0.dp,
+                top = 8.dp, // 0dp to remove, adjust as needed
+                bottom = 8.dp,
                 start = 0.dp,
                 end = 0.dp
-            )
-        ,
+            ),
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.None,
             autoCorrect = false,
@@ -890,9 +888,51 @@ fun LoginInputField(
         ),
         shape = RectangleShape,
         maxLines = 1,
-        singleLine = true
+        singleLine = true,
+        trailingIcon = {
+            if (isPassword) {
+                if (!passwordVisibility.value) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.visibility_off),
+                        contentDescription = "visibility off",
+                        tint = Color(0xFF68AB00)
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(id = R.drawable.show_icon),
+                        contentDescription = "visibility on",
+                        tint = Color(0xFF68AB00)
+                    )
+                }
+                IconButton(onClick = {
+                    passwordVisibility.value = !passwordVisibility.value
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.show_icon),
+                        contentDescription = "visibility on",
+                        tint = Color(0xFF68AB00)
+                    )
+                }
+            } else {
+
+            }
+        },
+        visualTransformation = if (isPassword && !passwordVisibility.value) PasswordVisualTransformation() else VisualTransformation.None
     )
+    Row {
+        Text(
+            text = "Forgot $label?", style = TextStyle(
+                color = Color(0xFF68AB00),
+                fontSize = 15.sp,
+                //fontFamily = FontFamily(Font(R.font.nunitosans_7pt_regular)),
+            ),
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 0.dp, 0.dp)
+                .offset(x = 100.dp)
+        )
+    }
 }
+
 @Composable
 fun InputFieldErrorText(errorMessage: String) {
     Text(
@@ -921,10 +961,11 @@ private fun UsernamePrev() {
     NormalTextFieldComponent(labelValue = "Username") {
     }
 }
+
 @Preview
 @Composable
 private fun SearchPreview() {
-    SearchField( onValueChange = {})
+    SearchField(onValueChange = {})
 }
 
 @Preview
@@ -932,15 +973,16 @@ private fun SearchPreview() {
 private fun SalePreview() {
     Sale()
 }
+
 @Preview
 @Composable
 private fun ToolbarPreview() {
-    Toolbar( onLogout = {})
+    Toolbar(onLogout = {})
 }
 
 
 @Preview
 @Composable
 private fun ItemPreview() {
-    ItemGrid(items = item)
+    ItemGrid(items = item) {}
 }

@@ -25,6 +25,7 @@ retrofit = "2.9.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 retrofitMock = "2.9.0"
 timber = "5.0.1"
+composePreviewRenderer = "0.0.1-alpha01"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,6 +64,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-mock = { module = "com.squareup.retrofit2:retrofit-mock", version.ref = "retrofitMock" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+compose-preview-renderer = { group = "com.android.tools.compose", name = "compose-preview-renderer", version.ref = "composePreviewRenderer" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

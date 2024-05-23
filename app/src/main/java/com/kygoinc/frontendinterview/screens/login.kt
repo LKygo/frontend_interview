@@ -11,8 +11,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -30,10 +35,14 @@ import com.kygoinc.frontendinterview.R
 @Composable
 fun Login(navController: NavController) {
 
+    val username = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .verticalScroll(rememberScrollState())
     ) {
         Box(
             modifier = Modifier
@@ -57,7 +66,7 @@ fun Login(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(0.8f),
-                    horizontalArrangement = androidx.compose.foundation.layout.Arrangement.Center
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.logo),
@@ -111,6 +120,7 @@ fun Login(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
+                .padding(horizontal = 16.dp)
                 .background(Color.White),
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
@@ -150,15 +160,22 @@ fun Login(navController: NavController) {
 
             Spacer(modifier = Modifier.height(80.dp))
 
-            NormalTextFieldComponent(labelValue = "Username") {
 
-            }
-            PasswordTextFieldComponent(labelValue = "Password") {
 
-            }
+            LoginInputField(
+                label = "Username",
+                inputValue = username.value,
+                isPassword = false,
+                onChangeValue = { username.value = it })
+
+            LoginInputField(
+                label = "Password",
+                inputValue = password.value,
+                isPassword = true,
+                onChangeValue = { password.value = it })
 
             LightGreenBtn(texValue = "Login", onClick = {
-                 navController.navigate("products")
+                navController.navigate("products")
 
             })
 
@@ -170,7 +187,7 @@ fun Login(navController: NavController) {
 
 @Preview
 @Composable
-private fun loginPreview() {
+private fun LoginPreview() {
     Login(rememberNavController())
 }
 

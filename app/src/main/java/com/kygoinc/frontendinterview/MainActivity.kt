@@ -24,7 +24,9 @@ import androidx.compose.material3.Text
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.kygoinc.frontendinterview.ui.theme.FrontEndInterviewTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +53,17 @@ fun AppNavigation() {
         composable(route = "products",) {
             Products(navController = navController)
         }
-        composable(route = "productDetails",) {
-            ProductDetails(navController = navController)
+        composable(route = "productDetails") {
+            val index = navController.previousBackStackEntry?.savedStateHandle?.get<Int>(
+                key = "index"
+            )
+            if (index == null) {
+
+                return@composable
+            }
+            ProductDetails(navController = navController,index = index)
         }
+
     }
 }
 
