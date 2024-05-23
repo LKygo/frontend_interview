@@ -1,16 +1,23 @@
 package com.kygoinc.frontendinterview.screens
 
 import android.util.Log
+import android.widget.Toolbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -48,6 +55,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Observer
@@ -60,7 +68,7 @@ import java.lang.Error
 @Composable
 fun AppInputWithIcon(
     error: String,
-    username : (String) -> Unit,
+    username: (String) -> Unit,
     password: (String) -> Unit,
     navController: NavController,
     viewModelFactory: ViewModelProvider.Factory
@@ -99,7 +107,7 @@ fun AppInputWithIcon(
 
                 ),
             label = {
-                if (textFieldValue.isEmpty() ) {
+                if (textFieldValue.isEmpty()) {
                     Text(
                         text = "Username", style = TextStyle(
                             color = Color.White,
@@ -151,11 +159,11 @@ fun AppInputWithIcon(
             modifier = Modifier
                 .wrapContentSize(),
             style = TextStyle(
-                    color = Color(0xFF68AB00),
+                color = Color(0xFF68AB00),
                 fontSize = 15.sp,
                 textAlign = TextAlign.Right,
 
-            )
+                )
         )
 
         TextField(
@@ -171,7 +179,7 @@ fun AppInputWithIcon(
                 if (textFieldValue.isEmpty())
                     Text(
                         text = error, style = TextStyle(
-                            color =  Color.Red ,
+                            color = Color.Red,
                             fontSize = 15.sp,
 
                             ),
@@ -212,7 +220,7 @@ fun AppInputWithIcon(
                     }
                 ) {
                     Icon(
-                        imageVector =  ImageVector.vectorResource(id = icon),
+                        imageVector = ImageVector.vectorResource(id = icon),
                         contentDescription = "null",
                         tint = MaterialTheme.colorScheme.primary
                     )
@@ -241,7 +249,8 @@ fun AppInputWithIcon(
                 )
         )
 
-    }}
+    }
+}
 
 @Composable
 fun LightGreenBtn(texValue: String, enabled: Boolean = true, onClick: () -> Unit) {
@@ -270,7 +279,7 @@ fun LightGreenBtn(texValue: String, enabled: Boolean = true, onClick: () -> Unit
                 color = Color.White,
                 fontSize = 17.sp,
 
-            ),
+                ),
             text = texValue
         )
     }
@@ -351,7 +360,6 @@ fun PasswordTextFieldComponent(
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NormalTextFieldComponent(
@@ -363,10 +371,11 @@ fun NormalTextFieldComponent(
         mutableStateOf("")
     }
 
-    OutlinedTextField(modifier = Modifier
-        .fillMaxWidth()
-        .heightIn(min = 12.dp)
-        .padding(vertical = 4.dp, horizontal = 10.dp),
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 12.dp)
+            .padding(vertical = 4.dp, horizontal = 10.dp),
         value = usernameValue.value,
         onValueChange = {
             usernameValue.value = it
@@ -389,6 +398,247 @@ fun NormalTextFieldComponent(
         keyboardOptions = KeyboardOptions.Default,
 
 
+        )
+
+}
+
+ val item = listOf(
+    Items(
+        title = "Item 1",
+        price = "Ksh 100",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 2",
+        price = "Ksh 200",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 3",
+        price = "Ksh 300",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 4",
+        price = "Ksh 400",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 5",
+        price = "Ksh 500",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 6",
+        price = "Ksh 600",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 7",
+        price = "Ksh 700",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 8",
+        price = "Ksh 800",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 9",
+        price = "Ksh 900",
+        image = R.drawable.login
+    ),
+    Items(
+        title = "Item 10",
+        price = "Ksh 1000",
+        image = R.drawable.login
     )
 
+)
+
+data class Items(
+    val title: String,
+    val price: String,
+    val image: Int
+)
+
+@Composable
+fun ItemComponent(
+//    items : List<Items> = item,
+    image: Int,
+    title: String,
+    price: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+//            .padding(top = 8.dp)
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = image),
+            contentDescription = "items",
+            modifier = modifier
+                .fillMaxWidth(0.8f)
+                .padding(top = 16.dp),
+            contentScale = ContentScale.Crop
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .padding(top = 4.dp)
+        )
+        {
+            Text(
+                text = title, style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                    .fillMaxWidth(0.8f)
+        )
+        {
+            Text(
+                text = price, style = TextStyle(
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            )
+        }
+    }
+}
+
+
+@Composable
+fun ItemGrid(
+    items: List<Items>,
+    modifier: Modifier = Modifier
+) {
+
+    Row {
+        Text(text = "Best Selling", style = TextStyle(
+            color = Color.Black,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        ),
+            modifier = Modifier
+                .padding(8.dp)
+        )
+    }
+
+    LazyVerticalGrid(columns = GridCells.Fixed(2),
+        modifier = Modifier,
+//            .padding(8.dp)
+//        contentPadding = PaddingValues(top = 4.dp)
+    ) {
+        items.forEach (
+
+
+        ){ item ->
+            item {
+                ItemComponent(
+                    image = item.image,
+                    title = item.title,
+                    price = item.price,
+                    modifier = modifier
+                        .padding(4.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun Toolbar(modifier: Modifier = Modifier) {
+  Row (
+      modifier = Modifier
+          .height(110.dp)
+          .fillMaxWidth()
+          .background(Color.White),
+      horizontalArrangement = Arrangement.SpaceBetween,
+      verticalAlignment = Alignment.Bottom
+  ){
+
+      IconButton(onClick = { /* Handle click event here */ }) {
+          Icon(
+              painter = painterResource(id = R.drawable.user), // Replace with your icon resource
+              contentDescription = "user"
+          )
+      }
+
+      Text(
+          text = "Hello userName",
+          style = TextStyle(
+              color = Color.Black,
+              fontSize = 20.sp,
+              fontWeight = FontWeight.Medium
+          ),
+          modifier = Modifier
+              .padding(bottom = 8.dp)
+      )
+
+
+      IconButton(onClick = { /* Handle click event here */ }) {
+          Icon(
+              painter = painterResource(id = R.drawable.logout), // Replace with your icon resource
+              contentDescription = "logout"
+          )
+      }
+  }
+}
+
+
+@Composable
+fun Sale(modifier: Modifier = Modifier) {
+    Row (
+        modifier = Modifier
+            .background(Color(0xFF68AB00))
+            .padding(8.dp)
+            .fillMaxWidth()
+        ,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.Bottom
+    ){
+
+
+        Text(
+            text = "15% off if you pay via MCoopCash!",
+            style = TextStyle(
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal
+            ),
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .background(Color(0xFF68AB00))
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SalePreview() {
+    Sale()
+}
+@Preview
+@Composable
+private fun ToolbarPreview() {
+    Toolbar()
+}
+
+
+@Preview
+@Composable
+private fun ItemPreview() {
+    ItemGrid(items = item)
 }
