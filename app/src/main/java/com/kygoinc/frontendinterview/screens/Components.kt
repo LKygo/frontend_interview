@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -316,10 +318,10 @@ fun PasswordTextFieldComponent(
             onValueChange(it)
         },
         label = { Text(text = labelValue) },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
+        colors = OutlinedTextFieldDefaults.colors(
+            cursorColor = Color.Black,
             focusedBorderColor = Color.Black,
             unfocusedBorderColor = Color.Black,
-            cursorColor = Color.Black,
             focusedLabelColor = Color.Black,
             unfocusedLabelColor = Color.Black,
         ),
@@ -363,6 +365,53 @@ fun PasswordTextFieldComponent(
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchField(
+    onValueChange: (String) -> Unit
+) {
+
+    val usernameValue = remember {
+        mutableStateOf("")
+    }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 12.dp)
+            .padding(vertical = 4.dp, horizontal = 10.dp),
+        value = usernameValue.value ,
+        onValueChange = {
+            usernameValue.value = it
+            onValueChange(it)
+        },
+        leadingIcon = {
+            Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Black)
+        },
+        trailingIcon = {
+            Icon(Icons.Default.List, contentDescription = "Search", tint = Color.Black)
+        },
+        label = { Text(text = "Search products") },
+        colors = OutlinedTextFieldDefaults.colors(
+            cursorColor = Color.Black,
+            focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Black,
+            focusedLabelColor = Color.Black,
+            unfocusedLabelColor = Color.Black,
+        ),
+        textStyle = TextStyle(
+            fontSize = 18.sp,
+            fontStyle = FontStyle.Normal,
+            fontWeight = FontWeight.Normal,
+            color = Color.Black
+        ),
+        keyboardOptions = KeyboardOptions.Default,
+
+
+        )
+
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -386,10 +435,10 @@ fun NormalTextFieldComponent(
             onValueChange(it)
         },
         label = { Text(text = labelValue) },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
+        colors = OutlinedTextFieldDefaults.colors(
+            cursorColor = Color.Black,
             focusedBorderColor = Color.Black,
             unfocusedBorderColor = Color.Black,
-            cursorColor = Color.Black,
             focusedLabelColor = Color.Black,
             unfocusedLabelColor = Color.Black,
         ),
@@ -667,11 +716,16 @@ fun Sale(modifier: Modifier = Modifier) {
     }
 }
 
-
+@Preview
+@Composable
+private fun UsernamePrev() {
+    NormalTextFieldComponent(labelValue = "Username") {
+    }
+}
 @Preview
 @Composable
 private fun SearchPreview() {
-    SearchBar()
+    SearchField( onValueChange = {})
 }
 
 @Preview

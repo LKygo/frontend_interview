@@ -24,7 +24,6 @@ fun Products(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
                 .verticalScroll(rememberScrollState())
         ) {
             Toolbar()
@@ -32,7 +31,7 @@ fun Products(modifier: Modifier = Modifier) {
             Sale()
 
             Spacer(modifier = Modifier.height(12.dp))
-            SearchBar()
+            SearchField(  onValueChange = {})
 
             ItemGrid(items = item)
         }
