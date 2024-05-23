@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun ProductDetails(modifier: Modifier = Modifier) {
+fun ProductDetails(navController: NavController, modifier: Modifier = Modifier) {
 
     Column (
         modifier = Modifier
@@ -22,5 +24,5 @@ fun ProductDetails(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun ProductDetailsPrev() {
-    ProductDetails()
+    ProductDetails(rememberNavController())
 }

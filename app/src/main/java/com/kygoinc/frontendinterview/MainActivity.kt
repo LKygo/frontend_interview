@@ -11,6 +11,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.kygoinc.frontendinterview.screens.Login
+import com.kygoinc.frontendinterview.screens.ProductDetails
+import com.kygoinc.frontendinterview.screens.Products
+
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.kygoinc.frontendinterview.ui.theme.FrontEndInterviewTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,13 +31,28 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FrontEndInterviewTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                  AppNavigation()
                 }
             }
+        }
+    }
+
+
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = "login",
+    ) {
+        composable(route = "login",) {
+            Login(navController = navController)
+        }
+        composable(route = "products",) {
+            Products(navController = navController)
+        }
+        composable(route = "productDetails",) {
+            ProductDetails(navController = navController)
         }
     }
 }

@@ -2,9 +2,12 @@ package com.kygoinc.frontendinterview.screens
 
 import android.util.Log
 import android.widget.Toolbar
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -45,6 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
@@ -650,10 +654,12 @@ fun ItemGrid(
 }
 
 @Composable
-fun Toolbar(modifier: Modifier = Modifier) {
+fun Toolbar(
+    onLogout: () -> Unit,
+    modifier: Modifier = Modifier) {
   Row (
       modifier = Modifier
-          .height(110.dp)
+          .height(90.dp)
           .fillMaxWidth()
           .background(Color.White),
       horizontalArrangement = Arrangement.SpaceBetween,
@@ -679,7 +685,7 @@ fun Toolbar(modifier: Modifier = Modifier) {
       )
 
 
-      IconButton(onClick = { /* Handle click event here */ }) {
+      IconButton(onClick = onLogout ) {
           Icon(
               painter = painterResource(id = R.drawable.logout), // Replace with your icon resource
               contentDescription = "logout"
@@ -716,6 +722,53 @@ fun Sale(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UsernameTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val isFocused = remember { mutableStateOf(false) }
+
+    Box(modifier) {
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusEvent { event ->
+                    isFocused.value = event.isFocused
+                }
+                .border(
+                    BorderStroke(1.dp, color = Color.LightGray),
+                    shape = RoundedCornerShape(8.dp) // Remove rounded corners for underline
+                ),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color(0xFF68AB00), // Hide default focus indicator
+                unfocusedIndicatorColor = Color.Transparent  // Hide default unfocused indicator
+            )
+        )
+
+        Text(
+            text = "Username",
+            color = Color.LightGray,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(top = if (isFocused.value) 4.dp else 16.dp) // Adjust label movement
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NewInputPrev() {
+    UsernameTextField(value = "", onValueChange = {})
+}
+
+
 @Preview
 @Composable
 private fun UsernamePrev() {
@@ -736,7 +789,7 @@ private fun SalePreview() {
 @Preview
 @Composable
 private fun ToolbarPreview() {
-    Toolbar()
+    Toolbar( onLogout = {})
 }
 
 
