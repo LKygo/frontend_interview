@@ -25,6 +25,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -667,10 +669,8 @@ fun Toolbar(
   ){
 
       IconButton(onClick = { /* Handle click event here */ }) {
-          Icon(
-              painter = painterResource(id = R.drawable.user), // Replace with your icon resource
-              contentDescription = "user"
-          )
+          Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Black)
+
       }
 
       Text(
@@ -700,7 +700,7 @@ fun Sale(modifier: Modifier = Modifier) {
     Row (
         modifier = Modifier
             .background(Color(0xFF68AB00))
-            .padding(8.dp)
+            .padding(14.dp)
             .fillMaxWidth()
         ,
         horizontalArrangement = Arrangement.Center,
@@ -712,7 +712,7 @@ fun Sale(modifier: Modifier = Modifier) {
             text = "15% off if you pay via MCoopCash!",
             style = TextStyle(
                 color = Color.White,
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Normal
             ),
             modifier = Modifier
@@ -759,6 +759,44 @@ fun UsernameTextField(
                 .align(Alignment.TopStart)
                 .padding(top = if (isFocused.value) 4.dp else 16.dp) // Adjust label movement
         )
+    }
+}
+
+@Composable
+fun DetailsToolbar(
+    onBack: ()-> Unit,
+    onCancel: ()-> Unit,
+modifier: Modifier = Modifier) {
+    Row (
+        modifier = Modifier
+            .height(90.dp)
+            .fillMaxWidth()
+            .background(Color.White),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
+    ){
+
+        IconButton(onClick = { /* Handle click event here */ }) {
+            Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.Black)
+
+        }
+
+        Text(
+            text = "Item name",
+            style = TextStyle(
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium
+            ),
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+        )
+
+
+        IconButton(onClick = { onCancel() } ) {
+            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.Black)
+
+        }
     }
 }
 
