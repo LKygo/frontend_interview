@@ -800,6 +800,114 @@ modifier: Modifier = Modifier) {
     }
 }
 
+
+@Composable
+fun LoginInputField(
+    label: String,
+    inputValue: String,
+    onChangeValue: (String) -> Unit,
+    errorMessage: String? = null,
+    indicator: Boolean = true,
+
+    ) {
+    val colors = TextFieldDefaults.colors(
+        errorTextColor = Color.Red,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
+        errorCursorColor = Color.Red,
+        focusedIndicatorColor = if (indicator) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.scrim,
+        unfocusedIndicatorColor = if (indicator) MaterialTheme.colorScheme.inversePrimary else MaterialTheme.colorScheme.scrim,
+        errorIndicatorColor = Color.Red,
+        errorLeadingIconColor = Color.Red,
+        errorTrailingIconColor = Color.Red,
+        errorLabelColor = Color.Red,
+        errorPlaceholderColor = Color.Red,
+        disabledIndicatorColor = Color.Transparent
+
+    )
+    TextField(
+        colors = colors,
+        value = inputValue,
+        textStyle = TextStyle(
+            fontSize = 17.sp,
+            textAlign = TextAlign.Left,
+            color = MaterialTheme.colorScheme.secondary,
+
+            //fontFamily = FontFamily(Font(R.font.nunitosans_7pt_regular)),
+
+
+        ),
+        isError = errorMessage != null,
+        label = {
+            if (inputValue.isEmpty() || errorMessage == null) {
+                Text(
+                    text = label,
+                    style = TextStyle(
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontSize = 15.sp,
+                        //fontFamily = FontFamily(Font(R.font.nunitosans_7pt_regular)),
+
+                    ),
+                    modifier = Modifier
+                        .padding(start = 0.dp)
+                        .offset(y = (-10).dp)
+                        .offset(x = (-20).dp)
+                )
+            } else {
+                Text(
+                    text = errorMessage,
+                    style = TextStyle(
+                        color = Color.Red,
+                        fontSize = 15.sp,
+                        //fontFamily = FontFamily(Font(R.font.nunitosans_7pt_regular)),
+
+                    ),
+                    modifier = Modifier
+                        .padding(start = 0.dp)
+                        .offset(y = (-10).dp)
+                        .offset(x = (-20).dp)
+
+                )
+            }
+        },
+        onValueChange = onChangeValue,
+        modifier = Modifier
+            .background(Color.Transparent)
+            .padding(
+                top = 0.dp, // 0dp to remove, adjust as needed
+                bottom = 0.dp,
+                start = 0.dp,
+                end = 0.dp
+            )
+        ,
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrect = false,
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+        ),
+        shape = RectangleShape,
+        maxLines = 1,
+        singleLine = true
+    )
+}
+@Composable
+fun InputFieldErrorText(errorMessage: String) {
+    Text(
+        text = errorMessage,
+        style = TextStyle(
+            color = Color.Red,
+            fontSize = 12.sp,
+            //fontFamily = FontFamily(Font(R.fo))
+        ),
+        modifier = Modifier
+            .padding(0.dp, 5.dp, 0.dp, 5.dp)
+
+    )
+}
+
 @Preview
 @Composable
 private fun NewInputPrev() {

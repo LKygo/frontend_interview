@@ -31,7 +31,7 @@ fun ProductDetails(navController: NavController, modifier: Modifier = Modifier) 
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+//            .verticalScroll(rememberScrollState())
     ){
 
         DetailsToolbar( onBack = { navController.popBackStack() },  onCancel =  { navController.popBackStack() } )
